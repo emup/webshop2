@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Winkelwagen{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">Winkelwagen</h1>
+        </div>
+    </div>
+        <div class="container my-4">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Prijs excl. btw</th>
+                    <th scope="col">Btw</th>
+                    <th scope="col">Aantal</th>
+                    <th scope="col">Actie</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set total = 0 %}
+                {% for product in products %}
+                    {% set amount = cart[product.id] %}
+                    {% set total = total + product.productprijs * amount %}
+                    <tr>
+                        <td>{{ product.productomschrijving }}</td>
+                        <td>&euro; {{ product.productprijs |number_format(2, ',', '.') }}</td>
+                        <td>{{ product.productbtw }}%</td>
+                        <td>{{ amount }}</td>
+                        <td>
+                            <form action="{{ path('cart_remove', { 'product': product.id }) }}">
+                                <button class="btn btn-danger">Verwijder</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <strong>Uw winkelwagen is leeg.</strong>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5">Totaal: &euro;{{ total |number_format(2, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <a class="btn btn-success" href="{{ path('checkout') }}">Bevestig aankoop</a>
+                        <a class="btn btn-secondary" href="{{ path('default') }}">Verder winkelen</a>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+{% endblock %}

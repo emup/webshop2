@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Factuur{% endblock %}
+
+{% block body %}
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Nieuw Factuur</h1>
+    </div>
+</div>
+<div class="container">
+    {{ include('factuur/_form.html.twig') }}
+
+    <a class="btn btn-primary my-1" href="{{ path('factuur_index') }}">Terug naar lijst</a>
+</div>
+{% endblock %}
