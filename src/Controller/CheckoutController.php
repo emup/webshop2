@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Factuur;
 use App\Entity\Factuurregel;
 use App\Entity\User;
+use App\Repository\FactuurRepository;
 use App\Repository\ProductRepository;
+use Core23\DompdfBundle\Wrapper\DompdfWrapperInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,6 +52,7 @@ class CheckoutController extends AbstractController
         $entityManager->flush();
 
         $session->remove('cart');
+        $session->set('last_factuur', $factuur->getId());
 
         return $this->redirectToRoute('checkout_success');
     }
@@ -58,5 +63,20 @@ class CheckoutController extends AbstractController
     public function finished()
     {
         return $this->render('checkout/success.html.twig');
+    }
+    public function __construct(DompdfWrapperInterface $wrapper)
+    {
+        $this->wrapper = $wrapper;
+    }
+
+    /**
+     * @Route("/pdf", name="factuurpdf")
+     */
+    public function factuurpdf(SessionInterface $session, DompdfWrapperInterface $wrapper, FactuurRepository $factuurRepository)
+    {
+        $factuur = $factuurRepository->findOneBy(['id' => $session->get('last_factuur')]);
+
+        $html = $this->renderView('checkout/factuurpdf.html.twig', ['factuur' => $factuur]);
+        return $wrapper->getStreamResponse($html, "factuur.pdf");
     }
 }

@@ -1,4 +1,13 @@
 {
+    "bacon/bacon-qr-code": {
+        "version": "2.0.0"
+    },
+    "core23/dompdf-bundle": {
+        "version": "2.6.0"
+    },
+    "dasprid/enum": {
+        "version": "1.0.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -75,6 +84,9 @@
     "doctrine/reflection": {
         "version": "v1.1.0"
     },
+    "dompdf/dompdf": {
+        "version": "v0.8.5"
+    },
     "easycorp/easy-log-handler": {
         "version": "1.0",
         "recipe": {
@@ -90,8 +102,20 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "endroid/installer": {
+        "version": "1.1.6"
+    },
+    "endroid/qr-code": {
+        "version": "3.7.7"
+    },
+    "endroid/qr-code-bundle": {
+        "version": "3.4.2"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "khanamiryan/qrcode-detector-decoder": {
+        "version": "1.0.2"
     },
     "laminas/laminas-code": {
         "version": "3.4.1"
@@ -105,6 +129,9 @@
     "monolog/monolog": {
         "version": "2.0.2"
     },
+    "myclabs/php-enum": {
+        "version": "1.7.6"
+    },
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
@@ -113,6 +140,12 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.7.0"
+    },
+    "phenx/php-font-lib": {
+        "version": "0.5.1"
+    },
+    "phenx/php-svg-lib": {
+        "version": "v0.3.3"
     },
     "php": {
         "version": "7.4"
@@ -140,6 +173,9 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "sabberworm/php-css-parser": {
+        "version": "8.3.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

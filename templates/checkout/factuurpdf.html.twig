@@ -1,0 +1,185 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <table class="table table-sm table-borderless">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="card-body p-0 align-top">
+                            <h1 class="card-title">Webshop</h1>
+                            <h4 class="card-subtitle mb-2 text-muted">Factuur bestelling</h4>
+        {#                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>#}
+                            <a href="https://example.com/webshop" class="card-link">webshop.tld</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-right">
+                            <img src="{{ qr_code_data_uri(factuur, { writer: 'png', size: 150 }) }}" alt="{{ factuur }}"/>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </div>
+        </table>
+        <table class="table table-sm table-striped mb-4">
+            <thead class="thead-light">
+                <tr>
+                    <th colspan="2">
+                        Gegevens
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>
+                        Factuurnummer
+                    </th>
+                    <td>
+                        {{ factuur }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Factuurdatum
+                    </th>
+                    <td>
+                        {{ factuur.factuurdatum|date('d-m-Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Vervaldatum
+                    </th>
+                    <td>
+                        {{ factuur.vervaldatum|date('d-m-Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Inzakeopdracht
+                    </th>
+                    <td>
+                        {{ factuur.inzakeopdracht }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Klantnummer
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Btw-nummer
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer.btwnummer }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Naam
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer.naam }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Adres
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer.adres }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Postcode
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer.postcode }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Plaats
+                    </th>
+                    <td>
+                        {{ factuur.klantnummer.plaats }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-striped">
+            <thead class="thead-light mt-4">
+                <tr>
+                    <th colspan="5">
+                        Producten
+                    </th>
+                </tr>
+                <tr>
+                    <th>Productcode</th>
+                    <th>Naam</th>
+                    <th>Aantal</th>
+                    <th>Prijs</th>
+                    <th>Prijs totaal</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set totaal = 0 %}
+            {% set totaalBtw = 0 %}
+            {% for regel in factuur.factuurregels %}
+                {% set productTotaal = regel.productcode.productprijs * regel.productaantal %}
+                {% set totaal = totaal + productTotaal %}
+                {% set totaalBtw = totaalBtw + productTotaal * (1 + regel.productcode.productbtw / 100) %}
+                <tr>
+                    <td>{{ regel.productcode }}</td>
+                    <td>{{ regel.productcode.productomschrijving }}</td>
+                    <td>{{ regel.productaantal }}</td>
+                    <td>
+                        &euro;{{ regel.productcode.productprijs|number_format(2, ',', '.') }}
+                        (&euro;{{ (regel.productcode.productprijs * (1 + regel.productcode.productbtw / 100))|number_format(2, ',', '.') }} incl. btw)
+                    </td>
+                    <td>
+                        &euro;{{ productTotaal | number_format(2, ',', '.') }}
+                        (&euro;{{ (productTotaal * (1 + regel.productcode.productbtw / 100))|number_format(2, ',', '.') }} incl. btw)
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot class="border-top table-borderless">
+                <tr>
+                    <td colspan="4" class="text-right">
+                        Totaal
+                    </td>
+                    <td>
+                        &euro;{{ totaal|number_format(2, ',', '.') }}
+                        (&euro;{{ totaalBtw|number_format(2, ',', '.') }} incl. btw)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-right">
+                        Korting
+                    </td>
+                    <td>
+                        {{ factuur.korting }}%
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-right">
+                        Subtotaal
+                    </td>
+                    <td>
+                        &euro;{{ (totaal * (1 + factuur.korting / 100))|number_format(2, ',', '.') }}
+                        (&euro;{{ (totaalBtw * (1 + factuur.korting / 100))|number_format(2, ',', '.') }} incl. btw)
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </body>
+</html>

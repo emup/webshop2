@@ -3,5 +3,14 @@
 {% block title %}Hello CheckoutController!{% endblock %}
 
 {% block body %}
-<p>Bedankt voor uw aankoop!</p>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Facturen</h1>
+    </div>
+</div>
+<div class="container">
+    <h2>Bedankt voor uw aankoop!</h2>
+    <p>Klik <a href="{{ path('factuurpdf') }}">hier</a> om uw factuur als PDF te downloaden.</p>
+{#    <iframe height="960" width="1280" src="{{ path('factuurpdf') }}"></iframe>#}
+</div>
 {% endblock %}
